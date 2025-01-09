@@ -1,0 +1,254 @@
+<template>
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container text-center">
+            <h1 class="display-7 mx-auto pr-2">{{ drill[0].title }}</h1>
+            <span class="d-inline-block badge badge-success mr-3">{{ drill[0].category.category_name }}</span><img :src="difficultyImage">
+            <p>made by {{ drill[0].user.name }}</p>
+
+            <div class="card-body text-center drill-body">
+                <button class="btn btn-primary mt-3" @click="doDrill" v-if="!isStarted">
+                    START
+                </button>
+                <p v-if="isCountDown" style="font-size: 100px;">
+                    {{ countDownNum }}
+                </p>
+                <template v-if="isStarted && !isCountDown &&!isEnd">
+                    <h2>{{ timerNum }}</h2>
+                    <h2 style="font-size:70px; font-family: 'Courier New', monospace; word-break: break-all; width: 100%;">
+                        {{ problemWords }}
+                    </h2>
+                    question number:<b>{{ currentProblemNum + 1}}</b><br>
+                    score:<b>{{ typingScore }}</b>
+                </template>
+                <template v-if="isEnd">
+                    <h2>Your Score</h2>
+                    <h2>{{ typingScore }}</h2>
+                    <p v-if="userId > 0">スコアを登録しました</p>
+                    <p v-else>ログインすればスコア管理ができます</p>
+                    <p v-model="endTitle">{{ endTitle }}</p>
+                    <p v-model="endTitle2">{{ endTitle2 }}</p>
+                    <a :href="'/typing_drill/drills/show/' + this.drill[0].id"><button class="btn btn-success">Click Replay</button></a>
+                </template>
+
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    export default {
+        props: {
+            drill: {
+                type: Array,
+            },
+            userId: {
+                type: Number
+            }
+        },
+        data: function() {
+            return {
+                endTitle: '',
+                endTitle2: '',
+                countDownNum: 3,
+                timerNum: 30,
+                missNum: 0,
+                wpm: 0,
+                isStarted: false,
+                isEnd: false,
+                isCountDown: false,
+                currentWordNum: 0,
+                currentProblemNum: 0,
+                totalProblem: 0
+            }
+        },
+        mounted() { //トータル問題数の計算
+            let problem = []
+            for(let i = 0; i < 10; i++) {
+                problem.push(this.drill[0].problems[i].question)
+            }
+            let filterNullProblem = problem.filter(e => {
+                return e !== ''
+            });
+
+            this.totalProblem = filterNullProblem.length;
+            console.log(filterNullProblem.length)
+        },
+        computed: {
+            problemWords: function() {
+                if(this.isEnd === false) {
+                    //１つずつ問題を持ってくる
+                    let problem = this.drill[0].problems[this.currentProblemNum].question;
+                    console.log(problem);
+
+                    let placeholder = '';
+                    for (let i = 0; i < this.currentWordNum; i++) {
+                        placeholder += '_';
+                    }
+
+                    return placeholder + problem.substr(this.currentWordNum);
+                }
+            },
+            totalWordsNum: function () {
+                if (this.isEnd === false) {
+                    //問題の総文字数を返す
+                    return this.problemWords.length;
+                }
+            },
+            typingScore: function () {
+                //スコア
+                let score = (this.wpm * 2) * (1 - this.missNum / (this.wpm * 2));
+                return isNaN(score) ? 0 : score;
+            },
+            difficultyImage: function() {
+                if (this.drill[0].difficulty === 1) {
+                    return '/typing_drill/img/star1.gif';
+                }
+                if (this.drill[0].difficulty === 2) {
+                    return '/typing_drill/img/star2.gif';
+                }
+                if (this.drill[0].difficulty === 3) {
+                    return '/typing_drill/img/star3.gif';
+                }
+                if (this.drill[0].difficulty === 4) {
+                    return '/typing_drill/img/star4.gif';
+                }
+                if (this.drill[0].difficulty === 5) {
+                    return '/typing_drill/img/star5.gif';
+                }
+
+            }
+        },
+        methods: {
+            doDrill: function () {
+                //スタートボタン、カウントダウン開始させる
+                this.isStarted = true;
+                this.countDown()
+            },
+            countDown: function () {
+                //カウントダウン画面
+                this.isCountDown = true
+                let timer = window.setInterval(() => {
+                    this.countDownNum -= 1;
+
+                    if(this.countDownNum <= 0) {
+                        this.isCountDown = false
+                        window.clearInterval(timer)
+                        //０になったら問題のタイマーと、１問目を表示させる
+                        this.countTimer()
+                        this.showFirstProblem()
+                    }
+                }, 1000)
+            },
+            showFirstProblem: function () {
+                const okSound = new Audio('../../sounds/keyboard3.mp3')
+                const ngSound = new Audio('../../sounds/incorrect2.mp3')
+
+                window.addEventListener('keypress', e => {
+                    if (this.isEnd === true) {
+                        e.preventDefault()
+                        return
+                    }
+                    console.log(e.key);
+                    if (e.key === this.problemWords[this.currentWordNum]) {
+                        console.log('正解！')
+                        this.soundPlay(okSound)
+                        ++this.currentWordNum
+
+                        ++this.wpm
+                        console.log('現在回答の文字数目:' + this.currentWordNum)
+
+                        if(this.totalWordsNum === this.currentWordNum) {
+                            console.log('次の問題へ')
+                            ++this.currentProblemNum
+                            this.currentWordNum = 0
+                            if (this.totalProblem === this.currentProblemNum) {
+                                this.isEnd = true
+                                this.postHighScore()
+                                this.postMyScore()
+                            }
+                        }
+                    } else {
+                        console.log('不正解')
+                        this.soundPlay(ngSound)
+                        ++this.missNum
+                        console.log('現在回答の文字数目:' + this.currentWordNum)
+                    }
+                })
+            },
+            countTimer: function () {
+                let timer = window.setInterval(() => {
+                    this.timerNum -= 1
+                    if(this.isEnd === true) {
+                        window.clearInterval(timer)
+                        console.log('カウントリセット')
+                        return;
+                    }
+                    if (this.timerNum <= 0) {
+                        this.postHighScore()
+                        this.postMyScore()
+                        this.isEnd = true
+                        window.clearInterval(timer)
+                    }
+                }, 1000);
+            },
+            postHighScore: function () {
+                //・ドリルのハイスコア（ハイスコアと、そのユーザーID）
+                //現在あるカラムと比較して大きければ入れる
+                if(this.userId === 0) {
+                    let guestId = '';
+                    const data = {
+                        high_score: this.typingScore,
+                        high_score_user_id: guestId
+                    }
+                    const url = `/typing_drill/api/drill/score/${this.drill[0].id}`;
+                    axios.post(url, data)
+                        .then( res => {
+                            this.endTitle = res.data;
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        })
+                } else {
+                    const data = {
+                        high_score: this.typingScore,
+                        high_score_user_id: this.userId
+                    }
+                    const url = `/typing_drill/api/drill/score/${this.drill[0].id}`;
+                    axios.post(url, data)
+                        .then( res => {
+                            this.endTitle2 = res.data;
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        })
+                }
+
+            },
+            postMyScore: function () {
+                //・個人のスコア記録（スコア、ユーザーID、drillID）
+                //ログインしてる場合のみ。
+                if(this.userId === 0) {
+                    return;
+                }
+                const data = {
+                    score: this.typingScore,
+                    user_id: this.userId
+                }
+                const url = `/typing_drill/api/myscore/${this.drill[0].id}`;
+                axios.post(url, data)
+                    .then(res => {
+                        this.endTitle = res.data;
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+
+            },
+            soundPlay: function (sound) {
+                sound.currentTime = 0
+                sound.play()
+            }
+
+        }
+    }
+</script>
