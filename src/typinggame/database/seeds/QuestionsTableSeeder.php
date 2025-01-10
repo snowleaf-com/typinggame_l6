@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
     use Illuminate\Support\Facades\DB;
 
-    class QuenstiosTableSeeder extends Seeder
+    class QuestionsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -12,7 +12,7 @@ use Illuminate\Database\Seeder;
      */
     public function run()
     {
-        DB::table('quenstios')->insert([
+        DB::table('questions')->insert([
            [
                'drill_id' => 1,
                'question' => 'testtttttttest',

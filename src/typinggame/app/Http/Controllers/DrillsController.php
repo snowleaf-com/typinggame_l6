@@ -152,9 +152,9 @@ class DrillsController extends Controller
             return redirect(route('index'))->with('flash_message', __('不正な操作が行われました'));
         }
 
-        $drill = Drill::with(['quenstios', 'category', 'user'])->where('id', $id)->get();
+        $drill = Drill::with(['questions', 'category', 'user'])->where('id', $id)->get();
 
-//        dd(json_decode(json_encode($drill)));
+    //    dd(json_decode(json_encode($drill)));
 
         $userId = empty(Auth::user()->id) ? 0 : Auth::user()->id;//ログインすればスコア登録できます用
 
@@ -174,7 +174,7 @@ class DrillsController extends Controller
             return redirect(route('index'))->with('flash_message', __('不正な操作が行われました'));
         }
         $categories = Category::all();
-        $drill = Drill::with('quenstios')->where('id', $id)->get();
+        $drill = Drill::with('questions')->where('id', $id)->get();
 
 //        dd(json_decode(json_encode($drill)));
 

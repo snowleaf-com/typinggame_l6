@@ -121,7 +121,7 @@ tabLabels.forEach(function (clickedLabel) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /var/www/html/typing_drill/resources/js/tab.js */"./resources/js/tab.js");
+module.exports = __webpack_require__(/*! /var/www/html/resources/js/tab.js */"./resources/js/tab.js");
 
 
 /***/ })

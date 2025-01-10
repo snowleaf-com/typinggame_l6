@@ -1978,43 +1978,43 @@ __webpack_require__.r(__webpack_exports__);
       isEnd: false,
       isCountDown: false,
       currentWordNum: 0,
-      currentProblemNum: 0,
-      totalProblem: 0
+      currentQuestionNum: 0,
+      totalQuestion: 0
     };
   },
   mounted: function mounted() {
     //トータル問題数の計算
-    var problem = [];
+    var question = [];
 
     for (var i = 0; i < 10; i++) {
-      problem.push(this.drill[0].problems[i].question);
+      question.push(this.drill[0].questions[i].question);
     }
 
-    var filterNullProblem = problem.filter(function (e) {
+    var filterNullQuestion = question.filter(function (e) {
       return e !== '';
     });
-    this.totalProblem = filterNullProblem.length;
-    console.log(filterNullProblem.length);
+    this.totalQuestion = filterNullQuestion.length;
+    console.log(filterNullQuestion.length);
   },
   computed: {
-    problemWords: function problemWords() {
+    questionWords: function questionWords() {
       if (this.isEnd === false) {
         //１つずつ問題を持ってくる
-        var problem = this.drill[0].problems[this.currentProblemNum].question;
-        console.log(problem);
+        var question = this.drill[0].questions[this.currentQuestionNum].question;
+        console.log(question);
         var placeholder = '';
 
         for (var i = 0; i < this.currentWordNum; i++) {
           placeholder += '_';
         }
 
-        return placeholder + problem.substr(this.currentWordNum);
+        return placeholder + question.substr(this.currentWordNum);
       }
     },
     totalWordsNum: function totalWordsNum() {
       if (this.isEnd === false) {
         //問題の総文字数を返す
-        return this.problemWords.length;
+        return this.questionWords.length;
       }
     },
     typingScore: function typingScore() {
@@ -2024,23 +2024,23 @@ __webpack_require__.r(__webpack_exports__);
     },
     difficultyImage: function difficultyImage() {
       if (this.drill[0].difficulty === 1) {
-        return '/typing_drill/img/star1.gif';
+        return '/img/star1.gif';
       }
 
       if (this.drill[0].difficulty === 2) {
-        return '/typing_drill/img/star2.gif';
+        return '/img/star2.gif';
       }
 
       if (this.drill[0].difficulty === 3) {
-        return '/typing_drill/img/star3.gif';
+        return '/img/star3.gif';
       }
 
       if (this.drill[0].difficulty === 4) {
-        return '/typing_drill/img/star4.gif';
+        return '/img/star4.gif';
       }
 
       if (this.drill[0].difficulty === 5) {
-        return '/typing_drill/img/star5.gif';
+        return '/img/star5.gif';
       }
     }
   },
@@ -2064,11 +2064,11 @@ __webpack_require__.r(__webpack_exports__);
 
           _this.countTimer();
 
-          _this.showFirstProblem();
+          _this.showFirstQuestion();
         }
       }, 1000);
     },
-    showFirstProblem: function showFirstProblem() {
+    showFirstQuestion: function showFirstQuestion() {
       var _this2 = this;
 
       var okSound = new Audio('../../sounds/keyboard3.mp3');
@@ -2081,7 +2081,7 @@ __webpack_require__.r(__webpack_exports__);
 
         console.log(e.key);
 
-        if (e.key === _this2.problemWords[_this2.currentWordNum]) {
+        if (e.key === _this2.questionWords[_this2.currentWordNum]) {
           console.log('正解！');
 
           _this2.soundPlay(okSound);
@@ -2092,10 +2092,10 @@ __webpack_require__.r(__webpack_exports__);
 
           if (_this2.totalWordsNum === _this2.currentWordNum) {
             console.log('次の問題へ');
-            ++_this2.currentProblemNum;
+            ++_this2.currentQuestionNum;
             _this2.currentWordNum = 0;
 
-            if (_this2.totalProblem === _this2.currentProblemNum) {
+            if (_this2.totalQuestion === _this2.currentQuestionNum) {
               _this2.isEnd = true;
 
               _this2.postHighScore();
@@ -2146,7 +2146,7 @@ __webpack_require__.r(__webpack_exports__);
           high_score: this.typingScore,
           high_score_user_id: guestId
         };
-        var url = "/typing_drill/api/drill/score/".concat(this.drill[0].id);
+        var url = "/api/drill/score/".concat(this.drill[0].id);
         axios.post(url, data).then(function (res) {
           _this4.endTitle = res.data;
         })["catch"](function (error) {
@@ -2158,7 +2158,7 @@ __webpack_require__.r(__webpack_exports__);
           high_score_user_id: this.userId
         };
 
-        var _url = "/typing_drill/api/drill/score/".concat(this.drill[0].id);
+        var _url = "/api/drill/score/".concat(this.drill[0].id);
 
         axios.post(_url, _data).then(function (res) {
           _this4.endTitle2 = res.data;
@@ -2180,7 +2180,7 @@ __webpack_require__.r(__webpack_exports__);
         score: this.typingScore,
         user_id: this.userId
       };
-      var url = "/typing_drill/api/myscore/".concat(this.drill[0].id);
+      var url = "/api/myscore/".concat(this.drill[0].id);
       axios.post(url, data).then(function (res) {
         _this5.endTitle = res.data;
       })["catch"](function (error) {
@@ -2658,45 +2658,45 @@ __webpack_require__.r(__webpack_exports__);
     this.newEvent.id = this.drill[0].id;
     this.newEvent.title = this.drill[0].title;
     this.newEvent.category = this.drill[0].category_id;
-    console.log(this.drill[0].problems.length);
-    this.newEvent.question1 = this.drill[0].problems[0].question;
-    this.newEvent.question2 = this.drill[0].problems[1].question;
-    this.newEvent.question3 = this.drill[0].problems[2].question;
-    this.newEvent.question4 = this.drill[0].problems[3].question;
-    this.newEvent.question5 = this.drill[0].problems[4].question;
+    console.log(this.drill[0].questions.length);
+    this.newEvent.question1 = this.drill[0].questions[0].question;
+    this.newEvent.question2 = this.drill[0].questions[1].question;
+    this.newEvent.question3 = this.drill[0].questions[2].question;
+    this.newEvent.question4 = this.drill[0].questions[3].question;
+    this.newEvent.question5 = this.drill[0].questions[4].question;
 
-    if (this.drill[0].problems[5] !== undefined) {
-      this.newEvent.question6 = this.drill[0].problems[5].question;
+    if (this.drill[0].questions[5] !== undefined) {
+      this.newEvent.question6 = this.drill[0].questions[5].question;
     }
 
-    if (this.drill[0].problems[6] !== undefined) {
-      this.newEvent.question7 = this.drill[0].problems[6].question;
+    if (this.drill[0].questions[6] !== undefined) {
+      this.newEvent.question7 = this.drill[0].questions[6].question;
     }
 
-    if (this.drill[0].problems[7] !== undefined) {
-      this.newEvent.question8 = this.drill[0].problems[7].question;
+    if (this.drill[0].questions[7] !== undefined) {
+      this.newEvent.question8 = this.drill[0].questions[7].question;
     }
 
-    if (this.drill[0].problems[8] !== undefined) {
-      this.newEvent.question9 = this.drill[0].problems[8].question;
+    if (this.drill[0].questions[8] !== undefined) {
+      this.newEvent.question9 = this.drill[0].questions[8].question;
     }
 
-    if (this.drill[0].problems[9] !== undefined) {
-      this.newEvent.question10 = this.drill[0].problems[9].question;
-    } // if(!!this.drill[0].problems[5]) {
-    //     this.newEvent.question6 = this.drill[0].problems[5].question;
+    if (this.drill[0].questions[9] !== undefined) {
+      this.newEvent.question10 = this.drill[0].questions[9].question;
+    } // if(!!this.drill[0].questions[5]) {
+    //     this.newEvent.question6 = this.drill[0].questions[5].question;
     // }
-    // if(!!this.drill[0].problems[6]) {
-    //     this.newEvent.question7 = this.drill[0].problems[6].question;
+    // if(!!this.drill[0].questions[6]) {
+    //     this.newEvent.question7 = this.drill[0].questions[6].question;
     // }
-    // if(!!this.drill[0].problems[7]) {
-    //     this.newEvent.question8 = this.drill[0].problems[7].question;
+    // if(!!this.drill[0].questions[7]) {
+    //     this.newEvent.question8 = this.drill[0].questions[7].question;
     // }
-    // if(!!this.drill[0].problems[8]) {
-    //     this.newEvent.question9 = this.drill[0].problems[8].question;
+    // if(!!this.drill[0].questions[8]) {
+    //     this.newEvent.question9 = this.drill[0].questions[8].question;
     // }
-    // if(!!this.drill[0].problems[9]) {
-    //     this.newEvent.question10 = this.drill[0].problems[9].question;
+    // if(!!this.drill[0].questions[9]) {
+    //     this.newEvent.question10 = this.drill[0].questions[9].question;
     // }
 
   }
@@ -3332,7 +3332,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       return function (str) {
         for (var i = 0; i < this.drills.length; i++) {
           if (str == this.drills[i].difficulty) {
-            return "/typing_drill/img/star".concat(str, ".gif");
+            return "/img/star".concat(str, ".gif");
           }
         }
       };
@@ -40735,13 +40735,13 @@ var render = function() {
                   [
                     _vm._v(
                       "\n                    " +
-                        _vm._s(_vm.problemWords) +
+                        _vm._s(_vm.questionWords) +
                         "\n                "
                     )
                   ]
                 ),
                 _vm._v("\n                question number:"),
-                _c("b", [_vm._v(_vm._s(_vm.currentProblemNum + 1))]),
+                _c("b", [_vm._v(_vm._s(_vm.currentQuestionNum + 1))]),
                 _c("br"),
                 _vm._v("\n                score:"),
                 _c("b", [_vm._v(_vm._s(_vm.typingScore))])
@@ -40758,41 +40758,17 @@ var render = function() {
                   ? _c("p", [_vm._v("スコアを登録しました")])
                   : _c("p", [_vm._v("ログインすればスコア管理ができます")]),
                 _vm._v(" "),
-                _c(
-                  "p",
-                  {
-                    model: {
-                      value: _vm.endTitle,
-                      callback: function($$v) {
-                        _vm.endTitle = $$v
-                      },
-                      expression: "endTitle"
-                    }
-                  },
-                  [_vm._v(_vm._s(_vm.endTitle))]
-                ),
+                _vm.endTitle
+                  ? _c("p", [_vm._v(_vm._s(_vm.endTitle))])
+                  : _vm._e(),
                 _vm._v(" "),
-                _c(
-                  "p",
-                  {
-                    model: {
-                      value: _vm.endTitle2,
-                      callback: function($$v) {
-                        _vm.endTitle2 = $$v
-                      },
-                      expression: "endTitle2"
-                    }
-                  },
-                  [_vm._v(_vm._s(_vm.endTitle2))]
-                ),
+                _vm.endTitle2
+                  ? _c("p", [_vm._v(_vm._s(_vm.endTitle2))])
+                  : _vm._e(),
                 _vm._v(" "),
                 _c(
                   "a",
-                  {
-                    attrs: {
-                      href: "/typing_drill/drills/show/" + this.drill[0].id
-                    }
-                  },
+                  { attrs: { href: "/drills/show/" + this.drill[0].id } },
                   [
                     _c("button", { staticClass: "btn btn-success" }, [
                       _vm._v("Click Replay")
@@ -40839,12 +40815,7 @@ var render = function() {
       _vm._v(" "),
       _c(
         "form",
-        {
-          attrs: {
-            action: "/typing_drill/update/" + _vm.newEvent.id,
-            method: "post"
-          }
-        },
+        { attrs: { action: "/update/" + _vm.newEvent.id, method: "post" } },
         [
           _vm._t("default"),
           _vm._v(" "),
@@ -41612,7 +41583,7 @@ var render = function() {
       _vm._v(" "),
       _c(
         "form",
-        { attrs: { action: "/typing_drill/store", method: "post" } },
+        { attrs: { action: "/store", method: "post" } },
         [
           _vm._t("default"),
           _vm._v(" "),
@@ -42627,9 +42598,7 @@ var render = function() {
                         "a",
                         {
                           staticClass: "btn btn-primary float-right",
-                          attrs: {
-                            href: "/typing_drill/drills/show/" + list.id
-                          }
+                          attrs: { href: "/drills/show/" + list.id }
                         },
                         [_vm._v("ゲーム開始")]
                       )
@@ -42646,7 +42615,7 @@ var render = function() {
     _vm._v(" "),
     _vm.itemLoading
       ? _c("div", { staticClass: "loading-animation pt-4" }, [
-          _c("img", { attrs: { src: "/typing_drill/img/loading.gif" } })
+          _c("img", { attrs: { src: "/img/loading.gif" } })
         ])
       : _vm._e()
   ])
@@ -55630,8 +55599,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /var/www/html/typing_drill/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /var/www/html/typing_drill/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /var/www/html/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /var/www/html/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

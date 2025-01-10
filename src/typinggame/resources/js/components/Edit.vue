@@ -3,7 +3,7 @@
         <div class="container">
             <h1 class="display-7 text-center pb-3">問題を編集する</h1>
             <p class="text-center text-danger">問題６〜１０以外は入力必須項目です。<br>問題は英数字・記号・半角スペースのみです。</p>
-            <form :action="'/typing_drill/update/' + newEvent.id" method="post">
+            <form :action="'/update/' + newEvent.id" method="post">
                 <slot></slot>
                 <input type="hidden" name="id" v-model="newEvent.id">
                 <div class="form-group row justify-content-center">
@@ -421,43 +421,43 @@
             this.newEvent.title = this.drill[0].title;
             this.newEvent.category = this.drill[0].category_id;
 
-            console.log(this.drill[0].quenstios.length);
+            console.log(this.drill[0].questions.length);
 
 
-            this.newEvent.question1 = this.drill[0].quenstios[0].question;
-            this.newEvent.question2 = this.drill[0].quenstios[1].question;
-            this.newEvent.question3 = this.drill[0].quenstios[2].question;
-            this.newEvent.question4 = this.drill[0].quenstios[3].question;
-            this.newEvent.question5 = this.drill[0].quenstios[4].question;
-            if(this.drill[0].quenstios[5] !== undefined) {
-                this.newEvent.question6 = this.drill[0].quenstios[5].question;
+            this.newEvent.question1 = this.drill[0].questions[0].question;
+            this.newEvent.question2 = this.drill[0].questions[1].question;
+            this.newEvent.question3 = this.drill[0].questions[2].question;
+            this.newEvent.question4 = this.drill[0].questions[3].question;
+            this.newEvent.question5 = this.drill[0].questions[4].question;
+            if(this.drill[0].questions[5] !== undefined) {
+                this.newEvent.question6 = this.drill[0].questions[5].question;
             }
-            if(this.drill[0].quenstios[6] !== undefined) {
-                this.newEvent.question7 = this.drill[0].quenstios[6].question;
+            if(this.drill[0].questions[6] !== undefined) {
+                this.newEvent.question7 = this.drill[0].questions[6].question;
             }
-            if(this.drill[0].quenstios[7] !== undefined) {
-                this.newEvent.question8 = this.drill[0].quenstios[7].question;
+            if(this.drill[0].questions[7] !== undefined) {
+                this.newEvent.question8 = this.drill[0].questions[7].question;
             }
-            if(this.drill[0].quenstios[8] !== undefined) {
-                this.newEvent.question9 = this.drill[0].quenstios[8].question;
+            if(this.drill[0].questions[8] !== undefined) {
+                this.newEvent.question9 = this.drill[0].questions[8].question;
             }
-            if(this.drill[0].quenstios[9] !== undefined) {
-                this.newEvent.question10 = this.drill[0].quenstios[9].question;
+            if(this.drill[0].questions[9] !== undefined) {
+                this.newEvent.question10 = this.drill[0].questions[9].question;
             }
-            // if(!!this.drill[0].quenstios[5]) {
-            //     this.newEvent.question6 = this.drill[0].quenstios[5].question;
+            // if(!!this.drill[0].questions[5]) {
+            //     this.newEvent.question6 = this.drill[0].questions[5].question;
             // }
-            // if(!!this.drill[0].quenstios[6]) {
-            //     this.newEvent.question7 = this.drill[0].quenstios[6].question;
+            // if(!!this.drill[0].questions[6]) {
+            //     this.newEvent.question7 = this.drill[0].questions[6].question;
             // }
-            // if(!!this.drill[0].quenstios[7]) {
-            //     this.newEvent.question8 = this.drill[0].quenstios[7].question;
+            // if(!!this.drill[0].questions[7]) {
+            //     this.newEvent.question8 = this.drill[0].questions[7].question;
             // }
-            // if(!!this.drill[0].quenstios[8]) {
-            //     this.newEvent.question9 = this.drill[0].quenstios[8].question;
+            // if(!!this.drill[0].questions[8]) {
+            //     this.newEvent.question9 = this.drill[0].questions[8].question;
             // }
-            // if(!!this.drill[0].quenstios[9]) {
-            //     this.newEvent.question10 = this.drill[0].quenstios[9].question;
+            // if(!!this.drill[0].questions[9]) {
+            //     this.newEvent.question10 = this.drill[0].questions[9].question;
             // }
 
         }

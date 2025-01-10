@@ -43,7 +43,7 @@
                                         <p class="card-text d-flex justify-content-end">
                                             作成者: {{ list.user.name }}
                                         </p>
-                                        <a :href="'/typing_drill/drills/show/' + list.id" class="btn btn-primary float-right">ゲーム開始</a>
+                                        <a :href="'/drills/show/' + list.id" class="btn btn-primary float-right">ゲーム開始</a>
                                     </div>
                                 </div>
                             </div>
@@ -53,7 +53,7 @@
             </div>
         </div>
         <div class="loading-animation pt-4" v-if="itemLoading">
-            <img src="/typing_drill/img/loading.gif">
+            <img src="/img/loading.gif">
         </div>
     </div>
     <!-- ローディングアニメーション -->
@@ -106,7 +106,7 @@
                 return function (str) {
                     for(let i = 0; i < this.drills.length; i++) {
                         if(str == this.drills[i].difficulty) {
-                            return `/typing_drill/img/star${str}.gif`;
+                            return `/img/star${str}.gif`;
                         }
                     }
                 };

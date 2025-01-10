@@ -15,7 +15,7 @@
                 <template v-if="isStarted && !isCountDown &&!isEnd">
                     <h2>{{ timerNum }}</h2>
                     <h2 style="font-size:70px; font-family: 'Courier New', monospace; word-break: break-all; width: 100%;">
-                        {{ quenstiosWords }}
+                        {{ questionWords }}
                     </h2>
                     question number:<b>{{ currentQuestionNum + 1}}</b><br>
                     score:<b>{{ typingScore }}</b>
@@ -25,9 +25,9 @@
                     <h2>{{ typingScore }}</h2>
                     <p v-if="userId > 0">スコアを登録しました</p>
                     <p v-else>ログインすればスコア管理ができます</p>
-                    <p v-model="endTitle">{{ endTitle }}</p>
-                    <p v-model="endTitle2">{{ endTitle2 }}</p>
-                    <a :href="'/typing_drill/drills/show/' + this.drill[0].id"><button class="btn btn-success">Click Replay</button></a>
+                    <p v-if="endTitle">{{ endTitle }}</p>
+                    <p v-if="endTitle2">{{ endTitle2 }}</p>
+                    <a :href="'/drills/show/' + this.drill[0].id"><button class="btn btn-success">Click Replay</button></a>
                 </template>
 
             </div>
@@ -62,11 +62,11 @@
             }
         },
         mounted() { //トータル問題数の計算
-            let quenstios = []
+            let question = []
             for(let i = 0; i < 10; i++) {
-                quenstios.push(this.drill[0].quenstios[i].question)
+                question.push(this.drill[0].questions[i].question)
             }
-            let filterNullQuestion = quenstios.filter(e => {
+            let filterNullQuestion = question.filter(e => {
                 return e !== ''
             });
 
@@ -74,24 +74,24 @@
             console.log(filterNullQuestion.length)
         },
         computed: {
-            quenstiosWords: function() {
+            questionWords: function() {
                 if(this.isEnd === false) {
                     //１つずつ問題を持ってくる
-                    let quenstios = this.drill[0].quenstios[this.currentQuestionNum].question;
-                    console.log(quenstios);
+                    let question = this.drill[0].questions[this.currentQuestionNum].question;
+                    console.log(question);
 
                     let placeholder = '';
                     for (let i = 0; i < this.currentWordNum; i++) {
                         placeholder += '_';
                     }
 
-                    return placeholder + quenstios.substr(this.currentWordNum);
+                    return placeholder + question.substr(this.currentWordNum);
                 }
             },
             totalWordsNum: function () {
                 if (this.isEnd === false) {
                     //問題の総文字数を返す
-                    return this.quenstiosWords.length;
+                    return this.questionWords.length;
                 }
             },
             typingScore: function () {
@@ -101,19 +101,19 @@
             },
             difficultyImage: function() {
                 if (this.drill[0].difficulty === 1) {
-                    return '/typing_drill/img/star1.gif';
+                    return '/img/star1.gif';
                 }
                 if (this.drill[0].difficulty === 2) {
-                    return '/typing_drill/img/star2.gif';
+                    return '/img/star2.gif';
                 }
                 if (this.drill[0].difficulty === 3) {
-                    return '/typing_drill/img/star3.gif';
+                    return '/img/star3.gif';
                 }
                 if (this.drill[0].difficulty === 4) {
-                    return '/typing_drill/img/star4.gif';
+                    return '/img/star4.gif';
                 }
                 if (this.drill[0].difficulty === 5) {
-                    return '/typing_drill/img/star5.gif';
+                    return '/img/star5.gif';
                 }
 
             }
@@ -149,7 +149,7 @@
                         return
                     }
                     console.log(e.key);
-                    if (e.key === this.quenstiosWords[this.currentWordNum]) {
+                    if (e.key === this.questionWords[this.currentWordNum]) {
                         console.log('正解！')
                         this.soundPlay(okSound)
                         ++this.currentWordNum
@@ -200,7 +200,7 @@
                         high_score: this.typingScore,
                         high_score_user_id: guestId
                     }
-                    const url = `/typing_drill/api/drill/score/${this.drill[0].id}`;
+                    const url = `/api/drill/score/${this.drill[0].id}`;
                     axios.post(url, data)
                         .then( res => {
                             this.endTitle = res.data;
@@ -213,7 +213,7 @@
                         high_score: this.typingScore,
                         high_score_user_id: this.userId
                     }
-                    const url = `/typing_drill/api/drill/score/${this.drill[0].id}`;
+                    const url = `/api/drill/score/${this.drill[0].id}`;
                     axios.post(url, data)
                         .then( res => {
                             this.endTitle2 = res.data;
@@ -234,7 +234,7 @@
                     score: this.typingScore,
                     user_id: this.userId
                 }
-                const url = `/typing_drill/api/myscore/${this.drill[0].id}`;
+                const url = `/api/myscore/${this.drill[0].id}`;
                 axios.post(url, data)
                     .then(res => {
                         this.endTitle = res.data;
