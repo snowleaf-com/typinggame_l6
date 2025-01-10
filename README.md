@@ -1,2 +1,3 @@
 # Typinggame Laravel6
-Laravel11, Vue.js3, Inertia.js, Viteによるアップデートを計画中
+PHP7.2, Laravel6, Vue.js2, MySQL5.7にて開発したものをDockerで環境を作り、再構築  
+Laravel11, Vue.js3, Inertia.js, Viteによるアップデートを計画中...
