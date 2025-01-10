@@ -148,7 +148,7 @@
 
 <script>
     export default {
-            props: ['categories', 'errors'],
+        props: ['categories', 'errors'],
         data() {
             return {
                 question6from10: false,//６問目以降表示するかどうか
@@ -176,7 +176,7 @@
                     question4: false,
                     question5: false,
                 },
-                throughValidation: {//任意項目（入力があればバリデーションをかける）
+                throughValidation: {//任意項目（入力があればバリデーションをかける）//通ったらtrue
                     question6: false,
                     question7: false,
                     question8: false,
@@ -335,24 +335,45 @@
                         valid = false
                     }
                 }
-                if(this.newEvent.question6 !== '') {
-                    if(!this.throughValidation.question6) {
-                        valid = false
+                // question6以降のバリデーション
+                if (this.newEvent.question6 !== '') {
+                    if (!this.throughValidation.question6) {
+                        valid = false;
+                    }
+                } else {
+                    // question6が空の場合、question7〜question10に入力があるとvalid=falseにする
+                    if (this.newEvent.question7 !== '' || this.newEvent.question8 !== '' || this.newEvent.question9 !== '' || this.newEvent.question10 !== '') {
+                        valid = false;
                     }
                 }
                 if(this.newEvent.question7 !== '') {
                     if(!this.throughValidation.question7) {
                         valid = false
                     }
+                } else {
+                    // question7が空の場合、question8〜question10に入力があるとvalid=falseにする
+                    if (this.newEvent.question8 !== '' || this.newEvent.question9 !== '' || this.newEvent.question10 !== '') {
+                        valid = false;
+                    }
                 }
                 if(this.newEvent.question8 !== '') {
                     if(!this.throughValidation.question8) {
                         valid = false
                     }
+                } else {
+                    // question8が空の場合、question9〜question10に入力があるとvalid=falseにする
+                    if (this.newEvent.question9 !== '' || this.newEvent.question10 !== '') {
+                        valid = false;
+                    }
                 }
                 if(this.newEvent.question9 !== '') {
                     if(!this.throughValidation.question9) {
                         valid = false
+                    }
+                } else {
+                    // question9が空の場合、question10に入力があるとvalid=falseにする
+                    if (this.newEvent.question10 !== '') {
+                        valid = false;
                     }
                 }
                 if(this.newEvent.question10 !== '') {
@@ -419,7 +440,14 @@
         methods: {
             inputContinue(e) {//６問目以降表示するボタン
                 e.preventDefault()
-                this.question6from10 = true
+                // 1〜5問目がすべて正しく入力されている場合のみ6問目以降を表示
+                if (this.checkValidation.question1 && this.checkValidation.question2 &&
+                    this.checkValidation.question3 && this.checkValidation.question4 &&
+                    this.checkValidation.question5) {
+                    this.question6from10 = true;
+                } else {
+                    alert('1〜5問目を正しく入力してください');
+                }
             }
         }
     }
