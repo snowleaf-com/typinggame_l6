@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Category;
 use App\Drill;
 use App\Http\Requests\DrillStore;
-use App\Problem;
+use App\Question;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -86,52 +86,52 @@ class DrillsController extends Controller
             $question10 = '';
         }
 
-        Problem::create([
+        Question::create([
             'drill_id' => $drill_id,
             'question' => $question1,
             'order' => 1
         ]);
-        Problem::create([
+        Question::create([
             'drill_id' => $drill_id,
             'question' => $question2,
             'order' => 2
         ]);
-        Problem::create([
+        Question::create([
             'drill_id' => $drill_id,
             'question' => $question3,
             'order' => 3
         ]);
-        Problem::create([
+        Question::create([
             'drill_id' => $drill_id,
             'question' => $question4,
             'order' => 4
         ]);
-        Problem::create([
+        Question::create([
             'drill_id' => $drill_id,
             'question' => $question5,
             'order' => 5
         ]);
-        Problem::create([
+        Question::create([
             'drill_id' => $drill_id,
             'question' => $question6,
             'order' => 6
         ]);
-        Problem::create([
+        Question::create([
             'drill_id' => $drill_id,
             'question' => $question7,
             'order' => 7
         ]);
-        Problem::create([
+        Question::create([
             'drill_id' => $drill_id,
             'question' => $question8,
             'order' => 8
         ]);
-        Problem::create([
+        Question::create([
             'drill_id' => $drill_id,
             'question' => $question9,
             'order' => 9
         ]);
-        Problem::create([
+        Question::create([
             'drill_id' => $drill_id,
             'question' => $question10,
             'order' => 10
@@ -152,7 +152,7 @@ class DrillsController extends Controller
             return redirect(route('index'))->with('flash_message', __('不正な操作が行われました'));
         }
 
-        $drill = Drill::with(['problems', 'category', 'user'])->where('id', $id)->get();
+        $drill = Drill::with(['quenstios', 'category', 'user'])->where('id', $id)->get();
 
 //        dd(json_decode(json_encode($drill)));
 
@@ -174,7 +174,7 @@ class DrillsController extends Controller
             return redirect(route('index'))->with('flash_message', __('不正な操作が行われました'));
         }
         $categories = Category::all();
-        $drill = Drill::with('problems')->where('id', $id)->get();
+        $drill = Drill::with('quenstios')->where('id', $id)->get();
 
 //        dd(json_decode(json_encode($drill)));
 
@@ -196,64 +196,64 @@ class DrillsController extends Controller
 
         Drill::find($id)->fill($drill_table)->save();
 
-        //problemのアップデート作業
+        //quenstionのアップデート作業
         //
         //fill => 'drill_id', 'question', 'order'
 
-        $problem_table1 = array('drill_id' => $id, 'question' => $request->input('question1'), 'order' => 1);
-        Problem::where('drill_id', $id)->where('order', 1)->first()->fill($problem_table1)->save();
+        $quenstion_table1 = array('drill_id' => $id, 'question' => $request->input('question1'), 'order' => 1);
+        Question::where('drill_id', $id)->where('order', 1)->first()->fill($quenstion_table1)->save();
 
-        $problem_table2 = array('drill_id' => $id, 'question' => $request->input('question2'), 'order' => 2);
-        Problem::where('drill_id', $id)->where('order', 2)->first()->fill($problem_table2)->save();
+        $quenstion_table2 = array('drill_id' => $id, 'question' => $request->input('question2'), 'order' => 2);
+        Question::where('drill_id', $id)->where('order', 2)->first()->fill($quenstion_table2)->save();
 
-        $problem_table3 = array('drill_id' => $id, 'question' => $request->input('question3'), 'order' => 3);
-        Problem::where('drill_id', $id)->where('order', 3)->first()->fill($problem_table3)->save();
+        $quenstion_table3 = array('drill_id' => $id, 'question' => $request->input('question3'), 'order' => 3);
+        Question::where('drill_id', $id)->where('order', 3)->first()->fill($quenstion_table3)->save();
 
-        $problem_table4 = array('drill_id' => $id, 'question' => $request->input('question4'), 'order' => 4);
-        Problem::where('drill_id', $id)->where('order', 4)->first()->fill($problem_table4)->save();
+        $quenstion_table4 = array('drill_id' => $id, 'question' => $request->input('question4'), 'order' => 4);
+        Question::where('drill_id', $id)->where('order', 4)->first()->fill($quenstion_table4)->save();
 
-        $problem_table5 = array('drill_id' => $id, 'question' => $request->input('question5'), 'order' => 5);
-        Problem::where('drill_id', $id)->where('order', 5)->first()->fill($problem_table5)->save();
+        $quenstion_table5 = array('drill_id' => $id, 'question' => $request->input('question5'), 'order' => 5);
+        Question::where('drill_id', $id)->where('order', 5)->first()->fill($quenstion_table5)->save();
 
 
         if(!empty($request->input('question6'))) {
-            $problem_table6 = array('drill_id' => $id, 'question' => $request->input('question6'), 'order' => 6);
-            Problem::where('drill_id', $id)->where('order', 6)->first()->fill($problem_table6)->save();
+            $quenstion_table6 = array('drill_id' => $id, 'question' => $request->input('question6'), 'order' => 6);
+            Question::where('drill_id', $id)->where('order', 6)->first()->fill($quenstion_table6)->save();
         } else {
-            $problem_table6 = array('drill_id' => $id, 'question' => '', 'order' => 6);
-            Problem::where('drill_id', $id)->where('order', 6)->first()->fill($problem_table6)->save();
+            $quenstion_table6 = array('drill_id' => $id, 'question' => '', 'order' => 6);
+            Question::where('drill_id', $id)->where('order', 6)->first()->fill($quenstion_table6)->save();
         }
 
         if(!empty($request->input('question7'))) {
-            $problem_table7 = array('drill_id' => $id, 'question' => $request->input('question7'), 'order' => 7);
-            Problem::where('drill_id', $id)->where('order', 7)->first()->fill($problem_table7)->save();
+            $quenstion_table7 = array('drill_id' => $id, 'question' => $request->input('question7'), 'order' => 7);
+            Question::where('drill_id', $id)->where('order', 7)->first()->fill($quenstion_table7)->save();
         } else {
-            $problem_table7 = array('drill_id' => $id, 'question' => '', 'order' => 7);
-            Problem::where('drill_id', $id)->where('order', 7)->first()->fill($problem_table7)->save();
+            $quenstion_table7 = array('drill_id' => $id, 'question' => '', 'order' => 7);
+            Question::where('drill_id', $id)->where('order', 7)->first()->fill($quenstion_table7)->save();
         }
 
         if(!empty($request->input('question8'))) {
-            $problem_table8 = array('drill_id' => $id, 'question' => $request->input('question8'), 'order' => 8);
-            Problem::where('drill_id', $id)->where('order', 8)->first()->fill($problem_table8)->save();
+            $quenstion_table8 = array('drill_id' => $id, 'question' => $request->input('question8'), 'order' => 8);
+            Question::where('drill_id', $id)->where('order', 8)->first()->fill($quenstion_table8)->save();
         } else {
-            $problem_table8 = array('drill_id' => $id, 'question' => '', 'order' => 8);
-            Problem::where('drill_id', $id)->where('order', 8)->first()->fill($problem_table8)->save();
+            $quenstion_table8 = array('drill_id' => $id, 'question' => '', 'order' => 8);
+            Question::where('drill_id', $id)->where('order', 8)->first()->fill($quenstion_table8)->save();
         }
 
         if(!empty($request->input('question9'))) {
-            $problem_table9 = array('drill_id' => $id, 'question' => $request->input('question9'), 'order' => 9);
-            Problem::where('drill_id', $id)->where('order', 9)->first()->fill($problem_table9)->save();
+            $quenstion_table9 = array('drill_id' => $id, 'question' => $request->input('question9'), 'order' => 9);
+            Question::where('drill_id', $id)->where('order', 9)->first()->fill($quenstion_table9)->save();
         } else {
-            $problem_table9 = array('drill_id' => $id, 'question' => '', 'order' => 9);
-            Problem::where('drill_id', $id)->where('order', 9)->first()->fill($problem_table9)->save();
+            $quenstion_table9 = array('drill_id' => $id, 'question' => '', 'order' => 9);
+            Question::where('drill_id', $id)->where('order', 9)->first()->fill($quenstion_table9)->save();
         }
 
         if(!empty($request->input('question10'))) {
-            $problem_table10 = array('drill_id' => $id, 'question' => $request->input('question10'), 'order' => 10);
-            Problem::where('drill_id', $id)->where('order', 10)->first()->fill($problem_table10)->save();
+            $quenstion_table10 = array('drill_id' => $id, 'question' => $request->input('question10'), 'order' => 10);
+            Question::where('drill_id', $id)->where('order', 10)->first()->fill($quenstion_table10)->save();
         } else {
-            $problem_table10 = array('drill_id' => $id, 'question' => '', 'order' => 10);
-            Problem::where('drill_id', $id)->where('order', 10)->first()->fill($problem_table10)->save();
+            $quenstion_table10 = array('drill_id' => $id, 'question' => '', 'order' => 10);
+            Question::where('drill_id', $id)->where('order', 10)->first()->fill($quenstion_table10)->save();
         }
 
 

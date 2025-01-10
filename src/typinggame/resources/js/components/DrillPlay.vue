@@ -15,9 +15,9 @@
                 <template v-if="isStarted && !isCountDown &&!isEnd">
                     <h2>{{ timerNum }}</h2>
                     <h2 style="font-size:70px; font-family: 'Courier New', monospace; word-break: break-all; width: 100%;">
-                        {{ problemWords }}
+                        {{ quenstiosWords }}
                     </h2>
-                    question number:<b>{{ currentProblemNum + 1}}</b><br>
+                    question number:<b>{{ currentQuestionNum + 1}}</b><br>
                     score:<b>{{ typingScore }}</b>
                 </template>
                 <template v-if="isEnd">
@@ -57,41 +57,41 @@
                 isEnd: false,
                 isCountDown: false,
                 currentWordNum: 0,
-                currentProblemNum: 0,
-                totalProblem: 0
+                currentQuestionNum: 0,
+                totalQuestion: 0
             }
         },
         mounted() { //トータル問題数の計算
-            let problem = []
+            let quenstios = []
             for(let i = 0; i < 10; i++) {
-                problem.push(this.drill[0].problems[i].question)
+                quenstios.push(this.drill[0].quenstios[i].question)
             }
-            let filterNullProblem = problem.filter(e => {
+            let filterNullQuestion = quenstios.filter(e => {
                 return e !== ''
             });
 
-            this.totalProblem = filterNullProblem.length;
-            console.log(filterNullProblem.length)
+            this.totalQuestion = filterNullQuestion.length;
+            console.log(filterNullQuestion.length)
         },
         computed: {
-            problemWords: function() {
+            quenstiosWords: function() {
                 if(this.isEnd === false) {
                     //１つずつ問題を持ってくる
-                    let problem = this.drill[0].problems[this.currentProblemNum].question;
-                    console.log(problem);
+                    let quenstios = this.drill[0].quenstios[this.currentQuestionNum].question;
+                    console.log(quenstios);
 
                     let placeholder = '';
                     for (let i = 0; i < this.currentWordNum; i++) {
                         placeholder += '_';
                     }
 
-                    return placeholder + problem.substr(this.currentWordNum);
+                    return placeholder + quenstios.substr(this.currentWordNum);
                 }
             },
             totalWordsNum: function () {
                 if (this.isEnd === false) {
                     //問題の総文字数を返す
-                    return this.problemWords.length;
+                    return this.quenstiosWords.length;
                 }
             },
             typingScore: function () {
@@ -135,11 +135,11 @@
                         window.clearInterval(timer)
                         //０になったら問題のタイマーと、１問目を表示させる
                         this.countTimer()
-                        this.showFirstProblem()
+                        this.showFirstQuestion()
                     }
                 }, 1000)
             },
-            showFirstProblem: function () {
+            showFirstQuestion: function () {
                 const okSound = new Audio('../../sounds/keyboard3.mp3')
                 const ngSound = new Audio('../../sounds/incorrect2.mp3')
 
@@ -149,7 +149,7 @@
                         return
                     }
                     console.log(e.key);
-                    if (e.key === this.problemWords[this.currentWordNum]) {
+                    if (e.key === this.quenstiosWords[this.currentWordNum]) {
                         console.log('正解！')
                         this.soundPlay(okSound)
                         ++this.currentWordNum
@@ -159,9 +159,9 @@
 
                         if(this.totalWordsNum === this.currentWordNum) {
                             console.log('次の問題へ')
-                            ++this.currentProblemNum
+                            ++this.currentQuestionNum
                             this.currentWordNum = 0
-                            if (this.totalProblem === this.currentProblemNum) {
+                            if (this.totalQuestion === this.currentQuestionNum) {
                                 this.isEnd = true
                                 this.postHighScore()
                                 this.postMyScore()

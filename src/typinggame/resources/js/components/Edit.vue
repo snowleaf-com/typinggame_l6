@@ -421,43 +421,43 @@
             this.newEvent.title = this.drill[0].title;
             this.newEvent.category = this.drill[0].category_id;
 
-            console.log(this.drill[0].problems.length);
+            console.log(this.drill[0].quenstios.length);
 
 
-            this.newEvent.question1 = this.drill[0].problems[0].question;
-            this.newEvent.question2 = this.drill[0].problems[1].question;
-            this.newEvent.question3 = this.drill[0].problems[2].question;
-            this.newEvent.question4 = this.drill[0].problems[3].question;
-            this.newEvent.question5 = this.drill[0].problems[4].question;
-            if(this.drill[0].problems[5] !== undefined) {
-                this.newEvent.question6 = this.drill[0].problems[5].question;
+            this.newEvent.question1 = this.drill[0].quenstios[0].question;
+            this.newEvent.question2 = this.drill[0].quenstios[1].question;
+            this.newEvent.question3 = this.drill[0].quenstios[2].question;
+            this.newEvent.question4 = this.drill[0].quenstios[3].question;
+            this.newEvent.question5 = this.drill[0].quenstios[4].question;
+            if(this.drill[0].quenstios[5] !== undefined) {
+                this.newEvent.question6 = this.drill[0].quenstios[5].question;
             }
-            if(this.drill[0].problems[6] !== undefined) {
-                this.newEvent.question7 = this.drill[0].problems[6].question;
+            if(this.drill[0].quenstios[6] !== undefined) {
+                this.newEvent.question7 = this.drill[0].quenstios[6].question;
             }
-            if(this.drill[0].problems[7] !== undefined) {
-                this.newEvent.question8 = this.drill[0].problems[7].question;
+            if(this.drill[0].quenstios[7] !== undefined) {
+                this.newEvent.question8 = this.drill[0].quenstios[7].question;
             }
-            if(this.drill[0].problems[8] !== undefined) {
-                this.newEvent.question9 = this.drill[0].problems[8].question;
+            if(this.drill[0].quenstios[8] !== undefined) {
+                this.newEvent.question9 = this.drill[0].quenstios[8].question;
             }
-            if(this.drill[0].problems[9] !== undefined) {
-                this.newEvent.question10 = this.drill[0].problems[9].question;
+            if(this.drill[0].quenstios[9] !== undefined) {
+                this.newEvent.question10 = this.drill[0].quenstios[9].question;
             }
-            // if(!!this.drill[0].problems[5]) {
-            //     this.newEvent.question6 = this.drill[0].problems[5].question;
+            // if(!!this.drill[0].quenstios[5]) {
+            //     this.newEvent.question6 = this.drill[0].quenstios[5].question;
             // }
-            // if(!!this.drill[0].problems[6]) {
-            //     this.newEvent.question7 = this.drill[0].problems[6].question;
+            // if(!!this.drill[0].quenstios[6]) {
+            //     this.newEvent.question7 = this.drill[0].quenstios[6].question;
             // }
-            // if(!!this.drill[0].problems[7]) {
-            //     this.newEvent.question8 = this.drill[0].problems[7].question;
+            // if(!!this.drill[0].quenstios[7]) {
+            //     this.newEvent.question8 = this.drill[0].quenstios[7].question;
             // }
-            // if(!!this.drill[0].problems[8]) {
-            //     this.newEvent.question9 = this.drill[0].problems[8].question;
+            // if(!!this.drill[0].quenstios[8]) {
+            //     this.newEvent.question9 = this.drill[0].quenstios[8].question;
             // }
-            // if(!!this.drill[0].problems[9]) {
-            //     this.newEvent.question10 = this.drill[0].problems[9].question;
+            // if(!!this.drill[0].quenstios[9]) {
+            //     this.newEvent.question10 = this.drill[0].quenstios[9].question;
             // }
 
         }

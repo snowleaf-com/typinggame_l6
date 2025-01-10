@@ -23,9 +23,9 @@ class Drill extends Model
         return $this->hasMany('App\Score');
     }
 
-    public function problems()
+    public function quenstios()
     {
-        return $this->hasMany('App\Problem');
+        return $this->hasMany('App\Question');
     }
 
     public function score_user()
