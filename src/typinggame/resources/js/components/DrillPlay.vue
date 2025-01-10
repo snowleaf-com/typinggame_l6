@@ -2,7 +2,7 @@
     <div class="jumbotron jumbotron-fluid">
         <div class="container text-center">
             <h1 class="display-7 mx-auto pr-2">{{ drill[0].title }}</h1>
-            <span class="d-inline-block badge badge-success mr-3">{{ drill[0].category.category_name }}</span><img :src="difficultyImage">
+            <span class="d-inline-block badge badge-success mr-3">{{ drill[0].category.category_name }}</span><img :src="difficultyImagePath">
             <p>made by {{ drill[0].user.name }}</p>
 
             <div class="card-body text-center drill-body">
@@ -58,7 +58,8 @@
                 isCountDown: false,
                 currentWordNum: 0,
                 currentQuestionNum: 0,
-                totalQuestion: 0
+                totalQuestion: 0,
+                difficultyImagePath: ''
             }
         },
         mounted() { //トータル問題数の計算
@@ -69,15 +70,28 @@
             let filterNullQuestion = question.filter(e => {
                 return e !== ''
             });
+            console.log(filterNullQuestion)
 
-            this.totalQuestion = filterNullQuestion.length;
+            this.totalQuestion = filterNullQuestion.length
             console.log(filterNullQuestion.length)
+
+            this.setDifficultyImage();//難易度画像の表示
         },
         computed: {
             questionWords: function() {
                 if(this.isEnd === false) {
-                    //１つずつ問題を持ってくる
                     let question = this.drill[0].questions[this.currentQuestionNum].question;
+                    /*
+                        +"questions": array:10 [▼
+                            0 => {#291 ▼
+                                +"id": 51
+                                +"drill_id": 6
+                                +"question": "a"
+                                +"order": 1
+                                +"created_at": "2025-01-10 21:54:35"
+                                +"updated_at": "2025-01-10 21:54:35"
+                            }
+                    */
                     console.log(question);
 
                     let placeholder = '';
@@ -85,7 +99,7 @@
                         placeholder += '_';
                     }
 
-                    return placeholder + question.substr(this.currentWordNum);
+                    return placeholder + question.slice(this.currentWordNum);
                 }
             },
             totalWordsNum: function () {
@@ -99,24 +113,6 @@
                 let score = (this.wpm * 2) * (1 - this.missNum / (this.wpm * 2));
                 return isNaN(score) ? 0 : score;
             },
-            difficultyImage: function() {
-                if (this.drill[0].difficulty === 1) {
-                    return '/img/star1.gif';
-                }
-                if (this.drill[0].difficulty === 2) {
-                    return '/img/star2.gif';
-                }
-                if (this.drill[0].difficulty === 3) {
-                    return '/img/star3.gif';
-                }
-                if (this.drill[0].difficulty === 4) {
-                    return '/img/star4.gif';
-                }
-                if (this.drill[0].difficulty === 5) {
-                    return '/img/star5.gif';
-                }
-
-            }
         },
         methods: {
             doDrill: function () {
@@ -247,7 +243,11 @@
             soundPlay: function (sound) {
                 sound.currentTime = 0
                 sound.play()
-            }
+            },
+            setDifficultyImage() {
+                const difficulty = this.drill[0].difficulty;
+                this.difficultyImagePath = `/img/star${difficulty}.gif`;
+            },
 
         }
     }
