@@ -120,14 +120,14 @@
                 this.selectDifficultyId = null;
             },
             async getItems() {
-                if (!this.canLoad || this.loading) return;
+                if (!this.canLoad || this.itemLoading) return;
                 this.itemLoading = true
                 try {
                     const response = await axios.get('api/lists?page=' + this.page);
                     const data = response.data
 
                     // アイテムをリストに追加
-                    this.drills = [...this.drills, ...data.data];
+                    this.drills = [...this.drills, ...data.drills.data];
                     // 最終ページに到達したらロードを停止
                     if (data.current_page >= data.last_page) {
                         this.canLoad = false;
@@ -174,7 +174,7 @@
             },
         },
         mounted() {
-            this.loadItems(); // 初回データロード
+            this.getItems(); // 初回データロード
             this.setupIntersectionObserver(); // Intersection Observer を設定
         }
     };
