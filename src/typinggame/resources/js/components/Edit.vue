@@ -329,24 +329,45 @@
                         valid = false
                     }
                 }
-                if(this.newEvent.question6 !== '') {
-                    if(!this.throughValidation.question6) {
-                        valid = false
+                // question6以降のバリデーション
+                if (this.newEvent.question6 !== '') {
+                    if (!this.throughValidation.question6) {
+                        valid = false;
+                    }
+                } else {
+                    // question6が空の場合、question7〜question10に入力があるとvalid=falseにする
+                    if (this.newEvent.question7 !== '' || this.newEvent.question8 !== '' || this.newEvent.question9 !== '' || this.newEvent.question10 !== '') {
+                        valid = false;
                     }
                 }
                 if(this.newEvent.question7 !== '') {
                     if(!this.throughValidation.question7) {
                         valid = false
                     }
+                } else {
+                    // question7が空の場合、question8〜question10に入力があるとvalid=falseにする
+                    if (this.newEvent.question8 !== '' || this.newEvent.question9 !== '' || this.newEvent.question10 !== '') {
+                        valid = false;
+                    }
                 }
                 if(this.newEvent.question8 !== '') {
                     if(!this.throughValidation.question8) {
                         valid = false
                     }
+                } else {
+                    // question8が空の場合、question9〜question10に入力があるとvalid=falseにする
+                    if (this.newEvent.question9 !== '' || this.newEvent.question10 !== '') {
+                        valid = false;
+                    }
                 }
                 if(this.newEvent.question9 !== '') {
                     if(!this.throughValidation.question9) {
                         valid = false
+                    }
+                } else {
+                    // question9が空の場合、question10に入力があるとvalid=falseにする
+                    if (this.newEvent.question10 !== '') {
+                        valid = false;
                     }
                 }
                 if(this.newEvent.question10 !== '') {
@@ -413,7 +434,14 @@
         methods: {
             inputContinue(e) {//６問目以降表示するボタン
                 e.preventDefault()
-                this.question6from10 = true
+                // 1〜5問目がすべて正しく入力されている場合のみ6問目以降を表示
+                if (this.checkValidation.question1 && this.checkValidation.question2 &&
+                    this.checkValidation.question3 && this.checkValidation.question4 &&
+                    this.checkValidation.question5) {
+                    this.question6from10 = true;
+                } else {
+                    alert('1〜5問目を正しく入力してください');
+                }
             }
         },
         mounted() {
@@ -421,45 +449,26 @@
             this.newEvent.title = this.drill[0].title;
             this.newEvent.category = this.drill[0].category_id;
 
-            console.log(this.drill[0].questions.length);
-
-
             this.newEvent.question1 = this.drill[0].questions[0].question;
             this.newEvent.question2 = this.drill[0].questions[1].question;
             this.newEvent.question3 = this.drill[0].questions[2].question;
             this.newEvent.question4 = this.drill[0].questions[3].question;
             this.newEvent.question5 = this.drill[0].questions[4].question;
-            if(this.drill[0].questions[5] !== undefined) {
+            if(this.drill[0].questions[5] !== '') {
                 this.newEvent.question6 = this.drill[0].questions[5].question;
             }
-            if(this.drill[0].questions[6] !== undefined) {
+            if(this.drill[0].questions[6] !== '') {
                 this.newEvent.question7 = this.drill[0].questions[6].question;
             }
-            if(this.drill[0].questions[7] !== undefined) {
+            if(this.drill[0].questions[7] !== '') {
                 this.newEvent.question8 = this.drill[0].questions[7].question;
             }
-            if(this.drill[0].questions[8] !== undefined) {
+            if(this.drill[0].questions[8] !== '') {
                 this.newEvent.question9 = this.drill[0].questions[8].question;
             }
-            if(this.drill[0].questions[9] !== undefined) {
+            if(this.drill[0].questions[9] !== '') {
                 this.newEvent.question10 = this.drill[0].questions[9].question;
             }
-            // if(!!this.drill[0].questions[5]) {
-            //     this.newEvent.question6 = this.drill[0].questions[5].question;
-            // }
-            // if(!!this.drill[0].questions[6]) {
-            //     this.newEvent.question7 = this.drill[0].questions[6].question;
-            // }
-            // if(!!this.drill[0].questions[7]) {
-            //     this.newEvent.question8 = this.drill[0].questions[7].question;
-            // }
-            // if(!!this.drill[0].questions[8]) {
-            //     this.newEvent.question9 = this.drill[0].questions[8].question;
-            // }
-            // if(!!this.drill[0].questions[9]) {
-            //     this.newEvent.question10 = this.drill[0].questions[9].question;
-            // }
-
         }
     }
 </script>
