@@ -55,6 +55,7 @@
         <div class="loading-animation pt-4" v-if="itemLoading">
             <img src="/img/loading.gif">
         </div>
+        <div ref="observerTarget" class="observer-target"></div>
     </div>
     <!-- ローディングアニメーション -->
 </template>
@@ -71,7 +72,7 @@
                 selectCategoryId: null,
                 selectDifficultyId: null,
                 itemLoading: false,
-                load: true,
+                canLoad: true,
                 page: 1,
                 drills: [],
             }
@@ -118,45 +119,65 @@
                 this.selectCategoryId = null;
                 this.selectDifficultyId = null;
             },
-            clearVar() {
-                this.itemLoading = false
-                this.load = true
-                this.page = 1
-                this.drills = []
-            },
             async getItems() {
-                if (this.load) {
-                    if (!this.itemLoading) {
-                        this.itemLoading = true
-                        try {
-                            const response = await axios.get('api/lists?page=' + this.page);
-                            if (response.data.drills.last_page == this.page) this.load = false;
-                            if (response.data.drills.data) {
-                                await response.data.drills.data.forEach((n, i) => {
-                                    this.drills.push(n)
-                                })
-                            }
-                            this.page += 1;
-                        } catch (e) {
-                            console.log(e.response)
-                            this.load = false
-                            this.itemLoading = false
-                        } finally {
-                            this.itemLoading = false
-                        }
+                if (!this.canLoad || this.loading) return;
+                this.itemLoading = true
+                try {
+                    const response = await axios.get('api/lists?page=' + this.page);
+                    const data = response.data
+
+                    // アイテムをリストに追加
+                    this.drills = [...this.drills, ...data.data];
+                    // 最終ページに到達したらロードを停止
+                    if (data.current_page >= data.last_page) {
+                        this.canLoad = false;
+                    } else {
+                        this.page += 1; // 次のページに進む
                     }
+                } catch (e) {
+                    console.log(e.response)
+                    this.canLoad = false
+                    this.itemLoading = false
+                } finally {
+                    this.itemLoading = false
                 }
+            },
+            setupIntersectionObserver() {
+                const target = this.$refs.observerTarget; // 監視対象の要素
+                if (!target) return;
+
+                const options = {
+                    root: null, // ビューポート全体を監視
+                    rootMargin: '0px', // 余白を設定（例: '200px' で早めにロード）
+                    threshold: 1.0 // 完全に見えたときにコールバック
+                };
+
+                // Intersection Observer のコールバック関数
+                const observerCallback = (entries) => {
+                    entries.forEach((entry) => {
+                    if (entry.isIntersecting && this.canLoad) {
+                        this.getItems(); // ターゲットが見えたらデータをロード
+                    }
+                    });
+                };
+
+                // Observerのインスタンスを作成
+                const observer = new IntersectionObserver(observerCallback, options);
+
+                // ターゲット要素を監視
+                observer.observe(target);
+
+                // コンポーネント破棄時に監視を解除
+                this.$once('hook:beforeDestroy', () => {
+                    observer.disconnect();
+                });
             },
         },
         mounted() {
-            this.clearVar();
-            window.addEventListener('scroll', _.throttle(() => {
-                let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight == document.documentElement.offsetHeight;
-                if (bottomOfWindow) this.getItems();
-            }, 200, { trailing: true, leading: true }));
-            this.getItems();
-        },
-    }
+            this.loadItems(); // 初回データロード
+            this.setupIntersectionObserver(); // Intersection Observer を設定
+        }
+    };
 </script>
 
 <style scoped lang="scss">
